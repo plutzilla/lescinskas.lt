@@ -21,6 +21,6 @@
         "gulp4-run-sequence": "^1.0.1"
     },
     "dependencies": {
-        "npm": "^7.0.0"
+        "npm": "^7.20.6"
     }
 }
