@@ -12,7 +12,9 @@ jobs:
   publish:
     uses: ./.github/workflows/_publish.yml
     needs: [build, minify]
-    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
   deploy:
     runs-on: ubuntu-26.04
     needs: [build, minify, publish]
