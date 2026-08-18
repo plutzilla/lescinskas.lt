@@ -6,20 +6,20 @@ on:
 jobs:
   minify:
     name: Minify website files
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Download built artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
           name: website-build
           path: _site
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v7
         with:
-          node-version: 16
+          node-version: 22
       - name: Cache Node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v6
         env:
           cache-name: node-module-cache
         with:
@@ -28,7 +28,7 @@ jobs:
       - run: npm install
       - run: npx gulp
       - name: Store minified website
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: website-minified
           path: _site

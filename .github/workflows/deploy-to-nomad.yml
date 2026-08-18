@@ -1,0 +1,51 @@
+name: Build and deploy lescinskas.lt website to Nomad cluster
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build.yml
+  minify:
+    uses: ./.github/workflows/_minify.yml
+    needs: [build]
+  publish:
+    uses: ./.github/workflows/_publish.yml
+    needs: [build, minify]
+  deploy:
+    runs-on: ubuntu-26.04
+    needs: [build, minify, publish]
+    environment: production
+    permissions:
+      deployments: write
+    env:
+      NOMAD_ADDR: ${{ vars.NOMAD_ADDR }}
+      NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
+      NOMAD_SKIP_VERIFY: "true"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-nomad@v1.0.0
+        with:
+          version: "1.8.4"
+      - name: Create GitHub deployment
+        id: deployment
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: production
+      - name: Deploy to Nomad
+        run: nomad job run -var="image_tag=${{ github.sha }}" deploy/nomad/job-spec.hcl
+      - name: Mark deployment as successful
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: success
+      - name: Mark deployment as failed
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: failure

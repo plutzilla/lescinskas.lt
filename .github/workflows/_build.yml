@@ -6,9 +6,9 @@ on:
 jobs:
   build:
     name: Build Jekyll website
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - run: mkdir src/.jekyll-cache
       - run: chmod 0777 src/.jekyll-cache
       - run: mkdir _site
@@ -20,7 +20,7 @@ jobs:
         env:
           JEKYLL_ENV: production
       - name: Store built website
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: website-build
           path: _site

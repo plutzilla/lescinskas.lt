@@ -1,8 +1,6 @@
-name: Deploy lescinskas.lt website to production
+name: Deploy lescinskas.lt website to DigitalOcean Kubernetes cluster
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
 
 jobs:
