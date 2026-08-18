@@ -28,7 +28,6 @@ The container listens to 4000 port which is forwarded to `localhost:8080`
 
 ### Deployment
 
-The site is deployed in Kubernetes cluster on Google Kubernetes Engine using [Drone](https://www.drone.io) as the CI/CD runner.
-Please see the [build pipeline](.drone.yml) for more details.
+The site is deployed using GH actions. See `.github/workflows` for more info.
 
 Please share your feedback via email: paulius.lescinskas@gmail.com
