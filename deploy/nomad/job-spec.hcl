@@ -56,7 +56,7 @@ job "lescinskas-website" {
       service {
         name = "lescinskas-website"
         port = "http"
-        provider = "nomad"
+        provider = "consul"
 
         check {
           type     = "http"
